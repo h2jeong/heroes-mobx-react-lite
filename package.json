@@ -3,23 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@reach/router": "^1.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
+    "mobx": "^5.15.4",
+    "mobx-react-lite": "^2.0.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "serve": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "backend": "json-server --watch db.json --port 5000 --delay=500",
+    "start": "concurrently \" yarn run backend\" \"yarn run serve\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,5 +39,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "eslint-plugin-react-hooks": "^4.0.2",
+    "json-server": "^0.16.1",
+    "prettier": "^2.0.5"
   }
 }
