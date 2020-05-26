@@ -1,48 +1,34 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Link } from "@reach/router";
+import React, { useContext, useState, useEffect } from "react";
+import { heroContext } from "../hero-context";
 import NewItemForm from "../../shared/components/NewItemForm";
-import { villainContext } from "../villain-context";
-import { useObserver } from "mobx-react-lite";
+import { Link } from "@reach/router";
 import { toJS } from "mobx";
+import { useObserver } from "mobx-react-lite";
 
-export default function Villains() {
-  const villainStore = useContext(villainContext);
-
-  const [isShowNewItemForm, setisShowNewItemForm] = useState(false);
-
-  // villains 불러오기
-  // const villains = villainStore.villains;
+export default function Heroes() {
+  const heroStore = useContext(heroContext);
+  const [isShowNewItemForm, setIsShowNewItemForm] = useState(false);
   useEffect(() => {
-    villainStore.getVillains();
-  }, []);
-  const showNewItemForm = () => {
-    setisShowNewItemForm(!isShowNewItemForm);
-  };
+    heroStore.getHeroes();
+  }, [heroStore]);
 
-  const onChange = ({ currentTarget: input }) => {
-    const newVillain = villainStore.villain;
-    const { name, value } = input;
-    newVillain[name] = value;
-    villainStore.setVillain(newVillain);
-    console.log("villains-change:", toJS(villainStore.villain));
+  const onChange = e => {
+    const { name, value } = e.target;
+    const newHero = heroStore.hero;
+    newHero[name] = value;
+    heroStore.setHero(newHero);
   };
-
   const onSubmit = e => {
-    e.preventDefault();
-    // submit 하기
-    villainStore.postVillain();
-
-    console.log("villains-submit", villainStore.villains, villainStore.villain);
-    setisShowNewItemForm(!isShowNewItemForm);
+    heroStore.postHero();
+    showNewItemForm(false);
   };
-
+  const showNewItemForm = () => {
+    setIsShowNewItemForm(!isShowNewItemForm);
+  };
   const removeItem = (id, name) => {
-    const isConfirmed = window.confirm(`Delete ${name}?`);
-    if (!isConfirmed) return;
-
-    villainStore.deleteVillain(id);
-
-    console.log("villains-remove ::", toJS(villainStore.villains));
+    console.log(window.confirm(`Delete ${name}?`));
+    heroStore.deleteHero(id);
+    console.log("heros-remove ::", toJS(heroStore.heroes));
   };
 
   return useObserver(() => (
@@ -53,9 +39,9 @@ export default function Villains() {
         handleOnSubmit={onSubmit}
         handleShowNewItemForm={showNewItemForm}
       />
-      {!villainStore.villains ? (
+      {!heroStore.heroes ? (
         <div
-          stlye={{
+          style={{
             display: "flex",
             flexDirection: "row",
             justifyContent: "center"
@@ -70,8 +56,8 @@ export default function Villains() {
           </div>
         </div>
       ) : (
-        villainStore.villains.map(item => (
-          <div key={item.id} className="card mt-3" stlye={{ width: "auto" }}>
+        heroStore.heroes.map(item => (
+          <div key={item.id} className="card mt-3" style={{ width: "auto" }}>
             <div className="card-header">
               <h3 className="card-title">
                 {item.firstName} {item.lastName}
@@ -82,8 +68,8 @@ export default function Villains() {
             <section className="card-body">
               <div className="row">
                 <Link
-                  to={`/edit-villain/${item.id}`}
-                  className="btn btn-primary cark-link col text-center"
+                  to={`/edit-hero/${item.id}`}
+                  className="btn btn-primary card-link col text-center"
                 >
                   <span className="fas fa-edit mr-2" />
                   Edit

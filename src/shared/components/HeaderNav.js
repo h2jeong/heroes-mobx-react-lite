@@ -1,8 +1,11 @@
 import React, { useState, useContext } from "react";
 import { Link } from "@reach/router";
 import { villainContext } from "../../villains/villain-context";
+import { heroContext } from "../../heroes/hero-context";
+import { useObserver } from "mobx-react-lite";
 
 export default function HeaderNav() {
+  const heroStore = useContext(heroContext);
   const villainStore = useContext(villainContext);
   const [navIsCollapse, setnavIsCollapse] = useState(true);
 
@@ -10,11 +13,11 @@ export default function HeaderNav() {
     setnavIsCollapse(!navIsCollapse);
   };
 
-  return (
+  return useObserver(() => (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <span className="navbar-brand">
         <li className="fas fa-cube" />
-        React Tour of Heroes
+        &nbsp;React Tour of Heroes
       </span>
       <button
         onClick={toggleNavBar}
@@ -49,11 +52,11 @@ export default function HeaderNav() {
         </ul>
 
         <span className="mr-5" style={{ color: "purple", fontSize: "24px" }}>
-          Total heroes:{" "}
+          Total heroes:{heroStore.totalHeroes}
         </span>
 
         <span className="mr-5" style={{ color: "purple", fontSize: "24px" }}>
-          Total villains:{villainStore.villains.length}
+          Total villains:{villainStore.totalVillains}
         </span>
 
         <ul className="navbar-nav my-2 my-lg-0">
@@ -80,5 +83,5 @@ export default function HeaderNav() {
         </ul>
       </div>
     </nav>
-  );
+  ));
 }
